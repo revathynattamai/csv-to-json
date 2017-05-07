@@ -1,16 +1,14 @@
-const fs = require('fs');
-const readline = require('readline');
-const stream = require('stream');
 require("colors");
-
-const inputFile = "indicators.csv";
-const outputFile = "indicators.json"
-
+var fs = require('fs');
+var readline = require('readline');
+var stream = require('stream');
+var inputFile = "indicators.csv";
+var outputFile = "indicators.json"
 var i = 1;
-
-const instream = fs.createReadStream(inputFile);
+var instream = fs.createReadStream(inputFile);
 var outstream = new stream;
 var rl = readline.createInterface(instream, outstream);
+var columns = [];
 
 var writeDataToFile = function(data, type) {
     var writeAction = fs.writeFile;
@@ -19,12 +17,12 @@ var writeDataToFile = function(data, type) {
         if(error) console.error('Write error: '+ error.message.red);
     });
 };
+
 //Writes the initial data
 writeDataToFile('{\n\"data\":[\n');
+
 startTime = new Date().getTime();
 console.log(('Started Parsing at '+startTime+' ms.').green);
-
-
 
 rl.on('line', function(data) {
     parser(data);
@@ -38,12 +36,9 @@ rl.on('close', function() {
     console.log(("Execution time = " + ((endTime - startTime)/1000)  +' sec' ).green);
 });
 
-var columns = [];
-
 var parser = function(line) {
     if(i == 1) {
         columns = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-        // console.log(columns);
     }
     else {
         var newLine = [];
@@ -68,5 +63,3 @@ var parser = function(line) {
     }
     i++;
 }
-
-
