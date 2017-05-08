@@ -5,6 +5,7 @@ var stream = require('stream');
 var inputFile = "indicators.csv";
 var outputFile = "indicators.json"
 var i = 1;
+var j = 1;
 var instream = fs.createReadStream(inputFile);
 var outstream = new stream;
 var rl = readline.createInterface(instream, outstream);
@@ -56,8 +57,10 @@ var parser = function(line) {
             newObj[columns[4]] = newLine[4];
             newObj[columns[5]] = newLine[5];
             var data = JSON.stringify(newObj);
-            if (data != '{}') {
-                writeDataToFile(data + ",\n", 1);
+            if (data !== '{}') {
+                if(j == 1) writeDataToFile(data, 1);   
+                else writeDataToFile(",\n" + data, 1);
+                j++;
             }
         }
     }
