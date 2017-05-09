@@ -47,7 +47,7 @@ var parser = function(line) {
         lineTemp.forEach(function(string) {
             newLine.push(string.replace(/['"]+/g, ''));
         });
-        var fields = ["Life expectancy at birth, female (years)", "Life expectancy at birth, male (years)", "Birth rate, crude (per 1,000 people)", "Death rate, crude (per 1,000 people)"];
+        var fields = ["Life expectancy at birth, female (years)", "Life expectancy at birth, male (years)", "Birth rate, crude (per 1,000 people)", "Death rate, crude (per 1,000 people)","Life expectancy at birth, total (years)"];
         if(fields.indexOf(newLine[2]) !== -1) {
             var newObj = {};
             newObj[columns[0]] = newLine[0];
