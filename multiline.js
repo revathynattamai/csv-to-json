@@ -5,22 +5,20 @@ var xScale = d3.scaleTime().range([0, width]);
 var yScale = d3.scaleLinear().range([height, 0]);
 var zScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-var appendSVGtoDOM = function () {
+var svg = (function () {
   return d3.select('.chart1')
     .append('svg')
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-};
+})();
 
-var appendChartToSVG = function () {
+var chart = (function () {
   return svg
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-};
+})();
 
 /* Main */
-var svg = appendSVGtoDOM();
-var chart = appendChartToSVG();
 
 var line = d3.line()
     .curve(d3.curveBasis)
@@ -49,16 +47,16 @@ d3.json("indicators.json", function (error, json) {
     }
   });
 console.log('params', params);
-  xScale.domain(d3.extent(data, function(d) { return d.Year; }));
+xScale.domain(d3.extent(data, function(d) { return d.Year; }));
 console.log(d3.extent(data, function(d) { return d.Year; }));
-  yScale.domain([
-    d3.min(params, function(c) { return d3.min(c.values, function(d) { return +d.value; }); }),
-    d3.max(params, function(c) { return d3.max(c.values, function(d) { return +d.value; }); })
-  ]);
+yScale.domain([
+  d3.min(params, function(c) { return d3.min(c.values, function(d) { return +d.value; }); }),
+  d3.max(params, function(c) { return d3.max(c.values, function(d) { return +d.value; }); })
+]);
 console.log(d3.min(params, function(c) { return d3.min(c.values, function(d) { return +d.value; }); }));
 console.log(d3.max(params, function(c) { return d3.max(c.values, function(d) { return +d.value; }); }));
 
-  zScale.domain(params.map(function(c) { console.log(c);return c.indicator; }));
+zScale.domain(params.map(function(c) { console.log(c);return c.indicator; }));
 
   chart
     .append("g")
@@ -90,7 +88,7 @@ console.log(d3.max(params, function(c) { return d3.max(c.values, function(d) { r
 
   param.append("text")
       .datum(function(d) { return {value: d.values[d.values.length - 1].value,  indicator: d.indicator, year: d.values[d.values.length - 1].year }})
-      .attr("transform", function(d) { console.log('dd', d); return "translate(" + xScale(+d.value.year) + ","+ yScale(+d.value.value) + ")"; })
+      .attr("transform", function(d) { console.log('dd', d); return "translate(" + xScale(+d.year) + ","+ yScale(+d.value) + ")"; })
       .attr("x", 3)
       .attr("dy", "0.35em")
       .style("font", "10px sans-serif")
