@@ -54,7 +54,6 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var data;
 var getGraphData = function(data) {
     return data;
 };
@@ -127,6 +126,6 @@ d3.json("indicators.json", function (error, json) {
 
 
 
-
+});
 
 </script>
