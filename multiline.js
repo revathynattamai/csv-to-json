@@ -21,42 +21,42 @@ var chart = (function () {
 /* Main */
 
 var line = d3.line()
-    .curve(d3.curveBasis)
-    .x(function(d) { return xScale(d.year); })
-    .y(function(d) { return yScale(d.value); });
+  .curve(d3.curveBasis)
+  .x(function (d) { return xScale(d.year); })
+  .y(function (d) { return yScale(d.value); });
 
 d3.json("indicators.json", function (error, json) {
   if (error) throw error;
   var data = getGraphData(json.data);
+
   var params = [];
-  data.forEach(function(d) {
+  data.forEach(function (d) {
     var flag = true;
-    params.forEach(function(param) {
-      if(param.indicator === d.IndicatorName) {
+    params.forEach(function (param) {
+      if (param.indicator === d.IndicatorName) {
         param.values.push({
           value: d.Value,
-          year: d.Year});
+          year: d.Year
+        });
         flag = false;
       }
     });
-    if(flag) {
+    if (flag) {
       params.push({
         indicator: d.IndicatorName,
-        values: [{value: d.Value, year: d.Year}] 
+        values: [{ value: d.Value, year: d.Year }]
       });
     }
   });
-console.log('params', params);
-xScale.domain(d3.extent(data, function(d) { return d.Year; }));
-console.log(d3.extent(data, function(d) { return d.Year; }));
-yScale.domain([
-  d3.min(params, function(c) { return d3.min(c.values, function(d) { return +d.value; }); }),
-  d3.max(params, function(c) { return d3.max(c.values, function(d) { return +d.value; }); })
-]);
-console.log(d3.min(params, function(c) { return d3.min(c.values, function(d) { return +d.value; }); }));
-console.log(d3.max(params, function(c) { return d3.max(c.values, function(d) { return +d.value; }); }));
 
-zScale.domain(params.map(function(c) { console.log(c);return c.indicator; }));
+  xScale.domain(d3.extent(data, function (d) { return d.Year; }));
+
+  yScale.domain([
+    d3.min(params, function (c) { return d3.min(c.values, function (d) { return +d.value; }); }),
+    d3.max(params, function (c) { return d3.max(c.values, function (d) { return +d.value; }); })
+  ]);
+
+  zScale.domain(params.map(function (c) { console.log(c); return c.indicator; }));
 
   chart
     .append("g")
@@ -81,18 +81,18 @@ zScale.domain(params.map(function(c) { console.log(c);return c.indicator; }));
     .attr("class", "param");
 
   param.append("path")
-      .attr("class", "line")
-      .attr("d", function(d) { return line(d.values); })    
-      .style("stroke", function(d) { return zScale(d.indicator); });
+    .attr("class", "line")
+    .attr("d", function (d) { return line(d.values); })
+    .style("stroke", function (d) { return zScale(d.indicator); });
 
 
   param.append("text")
-      .datum(function(d) { return {value: d.values[d.values.length - 1].value,  indicator: d.indicator, year: d.values[d.values.length - 1].year }})
-      .attr("transform", function(d) { console.log('dd', d); return "translate(" + xScale(+d.year) + ","+ yScale(+d.value) + ")"; })
-      .attr("x", 3)
-      .attr("dy", "0.35em")
-      .style("font", "10px sans-serif")
-      .text(function(d) { return d.indicator; });
+    .datum(function (d) { return { value: d.values[d.values.length - 1].value, indicator: d.indicator, year: d.values[d.values.length - 1].year } })
+    .attr("transform", function (d) { console.log('dd', d); return "translate(" + xScale(+d.year) + "," + yScale(+d.value) + ")"; })
+    .attr("x", 3)
+    .attr("dy", "0.35em")
+    .style("font", "10px sans-serif")
+    .text(function (d) { return d.indicator; });
 });
 
 var getGraphData = function (data) {
