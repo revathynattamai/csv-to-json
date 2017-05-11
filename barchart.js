@@ -1,4 +1,3 @@
-
 var margin = { top: 50, right: 50, bottom: 50, left: 50 };
 var width = 500 - margin.left - margin.right;
 var height = 500 - margin.top - margin.bottom;
@@ -9,23 +8,20 @@ var yDomain = [13500, 14000];
 var inputFile = 'indicators.json';
 var numberOfCountries = 5;
 
-var appendSVGtoDOM = function () {
+var svg = (function () {
     return d3.select('.chart1')
         .append('svg')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-};
+})();
 
-var appendChartToSVG = function() {
+var chart = (function() {
     return svg
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-};
+})();
 
 /* Main */
-var svg = appendSVGtoDOM();
-
-var chart = appendChartToSVG();
 
 d3.json(inputFile, function (error, json) {
     if (error) throw error;
