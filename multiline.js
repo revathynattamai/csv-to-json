@@ -56,7 +56,7 @@ d3.json("indicators.json", function (error, json) {
     d3.max(params, function (c) { return d3.max(c.values, function (d) { return +d.value; }); })
   ]);
 
-  zScale.domain(params.map(function (c) { console.log(c); return c.indicator; }));
+  zScale.domain(params.map(function (c) { return c.indicator; }));
 
   chart
     .append("g")
@@ -88,7 +88,7 @@ d3.json("indicators.json", function (error, json) {
 
   param.append("text")
     .datum(function (d) { return { value: d.values[d.values.length - 1].value, indicator: d.indicator, year: d.values[d.values.length - 1].year } })
-    .attr("transform", function (d) { console.log('dd', d); return "translate(" + xScale(+d.year) + "," + yScale(+d.value) + ")"; })
+    .attr("transform", function (d) { return "translate(" + xScale(+d.year) + "," + yScale(+d.value) + ")"; })
     .attr("x", 3)
     .attr("dy", "0.35em")
     .style("font", "10px sans-serif")
